@@ -22,6 +22,8 @@ public class ContactFunctionality {
 
     public static int mainMenu() {
         System.out.println("""
+                Hello! What would ou like to do?
+                
                 1. View contacts
                 2. Add a new contact
                 3. Search a contact by name
@@ -34,12 +36,20 @@ public class ContactFunctionality {
 
     }
 
+
+
     public static void userChoice(int choice) throws IOException {
         switch (choice) {
             case 1:
                 try {
                     List<String> allFiles = Files.readAllLines(Paths.get("data", "contacts.txt"));
-                    System.out.println(allFiles);
+                    System.out.println("Name             |   Phone number  |");
+                    System.out.println("------------------------------------");
+                    for(String line : allFiles){
+                        String name = line.substring(0, line.indexOf(" ", line.indexOf(" ") +1));
+                        String number = line.substring(line.indexOf(" ", line.indexOf(" ") +2));
+                        System.out.printf("%-17s|  %-15s|%n", name, number);
+                    }
                 } catch(IOException e) {
                     e.printStackTrace();
                 }
@@ -64,7 +74,6 @@ public class ContactFunctionality {
     public void printContacts() throws IOException {
         try {
             List<String> allFiles = Files.readAllLines(dataFile);
-            System.out.println(allFiles);
         } catch(IOException e) {
             e.printStackTrace();
         }
