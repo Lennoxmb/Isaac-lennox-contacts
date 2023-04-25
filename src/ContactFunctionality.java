@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,18 +22,22 @@ public class ContactFunctionality {
 
 
     public static int mainMenu() {
-        System.out.println((char)27 + "[35m" + "Hello! What would ou like to do?\n\n" +
-
+        System.out.println((char)27 + "[35m" + "Hello! What would ou like to do?\n" +
         (char)27 + "[36m" + """
                 1. View contacts
                 2. Add a new contact
                 3. Search a contact by name
                 4. Delete an existing contact
                 5. Exit
-                Enter a number option: 
+                Enter a number option: \n
                 """);
         Scanner sc = new Scanner(System.in);
-        return sc.nextInt();
+        int choice = sc.nextInt();
+        if (choice > 5) {
+            System.out.println("Not a valid number, try again.");
+            mainMenu();
+        }
+        return choice;
 
     }
 
@@ -40,22 +45,11 @@ public class ContactFunctionality {
 
     public static void userChoice(int choice) throws IOException {
         switch (choice) {
-            case 1:
-                ContactFunctionality.printContacts();
-                break;
-
-            case 2:
-                ContactFunctionality.addPerson();
-                break;
-            case 3:
-                ContactFunctionality.searchPerson();
-                break;
-            case 4:
-                ContactFunctionality.deletePerson();
-                break;
-            case 5:
-                System.out.println("Have a great day, goodbye!");
-
+            case 1 -> ContactFunctionality.printContacts();
+            case 2 -> ContactFunctionality.addPerson();
+            case 3 -> ContactFunctionality.searchPerson();
+            case 4 -> ContactFunctionality.deletePerson();
+            case 5 -> System.out.println("Have a great day, goodbye!");
         }
     }
 
@@ -132,7 +126,15 @@ public class ContactFunctionality {
             }
         }
         for (String line : newList) {
-            System.out.println(line);
+            System.out.println("\n");
+            System.out.println("Name             |   Phone number  |");
+            System.out.println("------------------------------------");
+            for(String el : newList){
+                String name = el.substring(0, line.indexOf(" ", line.indexOf(" ") +1));
+                String number = el.substring(line.indexOf(" ", line.indexOf(" ") +2));
+                System.out.printf("%-17s|  %-15s|%n", name, number);
+            }
+            System.out.println("\n");
         }
         System.out.println("\n");
         userChoice(mainMenu());
