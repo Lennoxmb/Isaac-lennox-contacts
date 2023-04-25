@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class ContactFunctionality {
     String directory = "data";
     String contactInfo = "contacts.txt";
@@ -22,14 +21,14 @@ public class ContactFunctionality {
 
 
     public static int mainMenu() {
-        System.out.println((char)27 + "[35m" + "Hello! What would ou like to do?\n" +
+        System.out.println((char)27 + "[35m" + "Hello! What would you like to do?\n" +
         (char)27 + "[36m" + """
                 1. View contacts
                 2. Add a new contact
                 3. Search a contact by name
                 4. Delete an existing contact
                 5. Exit
-                Enter a number option: \n
+                Enter a number option: 
                 """);
         Scanner sc = new Scanner(System.in);
         int choice = sc.nextInt();
@@ -78,7 +77,13 @@ public class ContactFunctionality {
         String lastName = sc.nextLine();
         System.out.println("Enter phone number");
         String phoneNumber = sc.nextLine();
-        String formattedPhone = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+        String formattedPhone = "";
+        if (phoneNumber.length() == 10) {
+            formattedPhone = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+        }
+        if (phoneNumber.length() == 7) {
+            formattedPhone = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 7);
+        }
         try {
             List<String> lines = Files.readAllLines(Paths.get("data", "contacts.txt"));
             for(String line : lines){
@@ -149,13 +154,16 @@ public class ContactFunctionality {
         List<String> newList = new ArrayList<>();
 
         for (String line : lines) {
-            if (!line.contains(delete)) {
+            if (!line.toLowerCase().contains(delete.toLowerCase())) {
                 newList.add(line);
+            } else {
+                System.out.println(line.substring(0, line.indexOf(" ", line.indexOf(" ") +1)) + " has been deleted");
             }
         }
 
         try {
             Files.write(Paths.get("data", "contacts.txt"), newList);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
